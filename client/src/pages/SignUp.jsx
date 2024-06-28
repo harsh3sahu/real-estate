@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 
@@ -7,6 +7,7 @@ function SignUp() {
   const [formData,setFormData]=useState({});
   const [error,setError]=useState(null)
   const[laoding,setLoading]=useState(false);
+  const navigate=useNavigate();
 
   const handleChange=(e)=>{
     setFormData({
@@ -18,7 +19,7 @@ function SignUp() {
 
   const handleSubmit= async(e)=>{
 
-    e.preventDefault();
+    try{e.preventDefault();
     setLoading(true);
     const res=await fetch('/api/auth/signup',
       {
@@ -38,8 +39,11 @@ function SignUp() {
     }
     setLoading(false);
     setError(null)
-    Navigate('/sign-in')
-    console.log(data);
+    navigate('/sign-in')}catch(error){
+      setLoading(false);
+    setError(error.message)
+    }
+    
   }
 
   console.log(formData)
